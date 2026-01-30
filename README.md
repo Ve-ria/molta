@@ -88,7 +88,7 @@ CLAWD_TOKEN="<Your Clawd Token>"
 请求体（兼容 OpenAI）：
 ```json
 {
-  "model": "clawd",
+  "model": "molta",
   "messages": [
     { "role": "user", "content": "你好" }
   ],

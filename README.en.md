@@ -88,7 +88,7 @@ Example response (`created` is current time):
 Request body (OpenAI-compatible):
 ```json
 {
-  "model": "clawd",
+  "model": "molta",
   "messages": [
     { "role": "user", "content": "Hello" }
   ],
