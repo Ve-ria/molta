@@ -1,7 +1,7 @@
 <h1 align="center">Molta</h1>
 <h3 align="center">✨ 在任意地方使用 MoltBot 🚀</h3>
 
-Molta 是一个轻量的 HTTP 网关：将类 OpenAI 的 `v1/chat/completions` 请求转发到本地 Clawd 网关（WebSocket），并返回兼容响应，方便你在现有客户端中直接使用 MoltBot。
+Molta 是一个轻量的 HTTP 网关：将类 OpenAI 的 `v1/chat/completions` 请求转发到本地 MoltBot(ClawdBot) 网关（WebSocket），并返回兼容响应，方便你在现有客户端中直接使用 MoltBot(ClawdBot)。
 
 ## 特性
 - OpenAI 风格接口：`/v1/chat/completions`、`/v1/models`
@@ -10,17 +10,34 @@ Molta 是一个轻量的 HTTP 网关：将类 OpenAI 的 `v1/chat/completions` �
 - 会话复用与快速创建新会话指令
 
 ## 快速开始
-> 需要 Node.js 20+ 与 pnpm
+> 需要 Node.js 20+（本地开发或 npm 安装时）
 
+### 方式 A：从 npm 安装
 ```bash
-pnpm install
-pnpm dev
+npm i -g molta
+molta
+```
+
+### 方式 B：Docker 运行
+```bash
+docker run --rm -p 8090:8090 \
+  -e TOKEN="<Your token>" \
+  -e CLAWD_TOKEN="<Your Clawd Token>" \
+  -e CLAWD_HOST="<Clawd host>" \
+  -e CLAWD_PORT=<Clawd port> \
+  ghcr.io/ve-ria/molta:latest
+```
+
+### 方式 C：本地开发（Yarn 4.12.0）
+```bash
+yarn install
+yarn dev
 ```
 
 启动后默认监听 `http://127.0.0.1:8090`。
 
 ## 环境变量
-项目会读取 `.env` 并校验（见 `schema.json`）。
+项目会读取当前目录的 `.env` 并校验（见 `schema.json`）。
 
 必填：
 - `TOKEN`：HTTP 接口鉴权 Token
@@ -29,12 +46,11 @@ pnpm dev
 可选：
 - `HOST`：监听地址，默认 `localhost`
 - `PORT`：监听端口，默认 `8090`
-- `CLAWD_HOST`：Clawd 网关地址，默认 `localhost`，
-  - 如您使用 Docker 部署 MoltBot(Clawd) 以及 Molta，请设置为`<Clawd Container ID>`，
-  - 如您使用可执行文件部署 MoltBot(Clawd) 以及 Molta，请设置为`localhost`(如果使用 Docker 部署 MoltBot(Clawd) 但使用可执行文件部署 Molta 也同样设置为此 HOST)
-  - 如您使用 Docker 部署 Molta 但使用可执行文件部署 MoltBot(Clawd)，请设置为`host.docker.internal`
+- `CLAWD_HOST`：Clawd 网关地址，默认 `localhost`
+  - Molta 与 Clawd 都在 Docker：填 Clawd 容器名或容器 IP
+  - Molta 在 Docker、Clawd 在本机：填 `host.docker.internal`
+  - Molta 与 Clawd 都在本机：填 `localhost`
 - `CLAWD_PORT`：Clawd 网关端口，默认 `18789`
-- `CLAWD_AGENT_ID`：预留字段（当前实现中未使用）
 
 示例：
 ```bash
@@ -90,15 +106,10 @@ Authorization: Bearer <TOKEN>
 - 会话 ID 基于 `user` 或 `id` 字段生成；未提供则使用 `http`。
 - 发送 `/clawd-new` 或 `clawd-new` 可强制创建新会话。
 
-## 运行与构建
+## 运行与构建（开发者）
 ```bash
-pnpm build
-pnpm start
-```
-
-打包可执行文件（多平台）：
-```bash
-pnpm package
+yarn build
+yarn start
 ```
 
 ## 目录结构

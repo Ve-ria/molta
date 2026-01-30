@@ -50,6 +50,13 @@ web_modules/
 # Optional npm cache directory
 .npm
 
+# Optional pnpm directory
+.pnpm-store
+.pnpm
+
+# Optional yarn cache
+.yarn
+
 # Optional eslint cache
 .eslintcache
 
