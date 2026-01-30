@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Environment Variables",
+  "type": "object",
+  "required": ["TOKEN", "CLAWD_TOKEN"],
+  "properties": {
+    "TOKEN": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Token for authentication"
+    },
+    "HOST": {
+      "type": "string",
+      "minLength": 1,
+      "default": "localhost",
+      "description": "Host for authentication"
+    },
+    "PORT": {
+      "type": "number",
+      "maximum": 65535,
+      "default": 8090,
+      "description": "Port number"
+    },
+    "CLAWD_AGENT_ID": {
+      "type": "string",
+      "default": "main",
+      "description": "Agent ID for Clawd"
+    },
+    "CLAWD_HOST": {
+      "type": "string",
+      "default": "localhost",
+      "description": "Host for Clawd"
+    },
+    "CLAWD_PORT": {
+      "type": "number",
+      "maximum": 65535,
+      "default": 18789,
+      "description": "Port for Clawd"
+    },
+    "CLAWD_TOKEN": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Token for Clawd authentication"
+    }
+  }
+}

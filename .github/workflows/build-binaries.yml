@@ -1,0 +1,58 @@
+name: Build Binaries
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: node20-linux-x64
+            output: molta-linux-x64
+          - os: windows-latest
+            target: node20-win-x64
+            output: molta-win-x64.exe
+          - os: macos-13
+            target: node20-macos-x64
+            output: molta-macos-x64
+          - os: macos-14
+            target: node20-macos-arm64
+            output: molta-macos-arm64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          pnpm -v
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build binary
+        run: |
+          pnpm run build:pkg
+          pnpm exec pkg -t ${{ matrix.target }} -o dist/${{ matrix.output }} dist-pkg/index.cjs
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.output }}
+          path: dist/${{ matrix.output }}

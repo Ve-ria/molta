@@ -1,0 +1,38 @@
+{
+  "name": "molta",
+  "version": "1.0.0",
+  "description": "Use MoltBot anywhere",
+  "type": "module",
+  "keywords": [
+    "MoltBot"
+  ],
+  "author": "Sylphy-0xd3ac",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "build:pkg": "tsc -p tsconfig.pkg.json && node -e \"const fs=require('fs');fs.renameSync('dist-pkg/index.js','dist-pkg/index.cjs')\"",
+    "dev": "tsx src/index.ts",
+    "package": "pnpm run build:pkg && pkg -t node20-linux-x64,node20-win-x64,node20-macos-x64,node20-macos-arm64 -o dist/molta dist-pkg/index.cjs",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@elysiajs/node": "^1.4.3",
+    "@elysiajs/openapi": "^1.4.14",
+    "ajv": "^8.17.1",
+    "dotenv": "^17.2.3",
+    "elysia": "^1.4.22",
+    "js-yaml": "^4.1.1",
+    "supports-color": "^10.2.2",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "pkg": "^5.8.1",
+    "tsx": "^4.21.0"
+  },
+  "pkg": {
+    "assets": [
+      "schema.json"
+    ]
+  }
+}
