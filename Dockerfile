@@ -30,8 +30,8 @@ COPY --from=builder /app/package.json /app/yarn.lock /app/.yarnrc.yml ./
 
 # 安装依赖（生产）
 RUN corepack enable && \
-    corepack prepare yarn@4.10.0 --activate && \
-    yarn install --immutable --production
+    corepack prepare yarn@4.12.0 --activate && \
+    yarn install --immutable
 
 # 暴露端口
 EXPOSE 3000

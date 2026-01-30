@@ -1,5 +1,6 @@
 <h1 align="center">Molta</h1>
 <h3 align="center">✨ 在任意地方使用 MoltBot 🚀</h3>
+<p align="center"><a href="./README.en.md">English</a></p>
 
 Molta 是一个轻量的 HTTP 网关：将类 OpenAI 的 `v1/chat/completions` 请求转发到本地 MoltBot(ClawdBot) 网关（WebSocket），并返回兼容响应，方便你在现有客户端中直接使用 MoltBot(ClawdBot)。
 

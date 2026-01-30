@@ -22,12 +22,11 @@ jobs:
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
-          cache: "yarn"
 
       - name: Setup Yarn
         run: |
           corepack enable
-          corepack prepare yarn@4.10.0 --activate
+          corepack prepare yarn@4.12.0 --activate
           yarn -v
 
       - name: Ensure npm supports OIDC

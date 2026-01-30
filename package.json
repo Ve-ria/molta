@@ -15,9 +15,7 @@
     "prepublishOnly": "yarn build && node scripts/add-shebang.cjs",
     "start": "node dist/index.js"
   },
-  "bin": {
-    "molta": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "files": [
     "dist",
     "schema.json"
