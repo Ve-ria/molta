@@ -16,10 +16,12 @@ elysia
     references: fromTypes() 
   }))
 
-elysia.listen(configObject.port, () => {
-    logger.info(`Server started on http://${configObject.host}:${configObject.port}`)
-})
+elysia.listen(
+  { hostname: configObject.host, port: configObject.port },
+  () => {
+    logger.info(`Server started on http://${configObject.host}:${configObject.port}`);
+  }
+);
 
 logger.info("Initialized server successfully")
-
 
