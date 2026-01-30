@@ -1,14 +1,10 @@
 import { Ajv } from 'ajv';
 import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { resolve } from 'path';
 import { Logger, type LoggerType } from "./logger.js";
 import "./env.js";
 
 const logger = new Logger("ajv") as LoggerType;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 interface EnvFormat {
   TOKEN: string;
@@ -23,7 +19,7 @@ interface EnvFormat {
 
 export function validate(obj: object): EnvFormat {
   try {
-    const schemaPath = resolve(__dirname, '../../schema.json');
+    const schemaPath = resolve(process.cwd(), 'schema.json');
     const schema = JSON.parse(readFileSync(schemaPath, 'utf-8'));
 
     const ajv = new Ajv({
@@ -49,8 +45,9 @@ export function validate(obj: object): EnvFormat {
     return data as EnvFormat;
   } catch (error) {
     if ((error as { code: string }).code === 'ENOENT') {
-      logger.error(`Schema file not found at: ${resolve(__dirname, 'schema.json')}`)
-      throw new Error(`Schema file not found at: ${resolve(__dirname, 'schema.json')}`);
+      const schemaPath = resolve(process.cwd(), 'schema.json');
+      logger.error(`Schema file not found at: ${schemaPath}`)
+      throw new Error(`Schema file not found at: ${schemaPath}`);
     }
     throw error;
   }

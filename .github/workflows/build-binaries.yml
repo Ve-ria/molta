@@ -22,10 +22,10 @@ jobs:
           - os: windows-latest
             target: node20-win-x64
             output: molta-win-x64.exe
-          - os: macos-13
+          - os: macos-15-intel
             target: node20-macos-x64
             output: molta-macos-x64
-          - os: macos-14
+          - os: macos-latest
             target: node20-macos-arm64
             output: molta-macos-arm64
 
