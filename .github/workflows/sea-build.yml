@@ -17,16 +17,16 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            node: "22"
+            node: "25"
             output: dist/molta-sea-linux-x64
           - os: macos-latest
-            node: "22"
+            node: "25"
             output: dist/molta-sea-macos-arm64
           - os: macos-15-intel
-            node: "22"
+            node: "25"
             output: dist/molta-sea-macos-x64
           - os: windows-latest
-            node: "22"
+            node: "25"
             output: dist/molta-sea-win-x64.exe
 
     steps:
