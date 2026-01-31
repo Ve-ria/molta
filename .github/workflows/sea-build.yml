@@ -56,11 +56,15 @@ jobs:
         run: |
           cat > sea-config.json <<'JSON'
           {
-            "main": "dist/index.js",
+            "main": "dist-sea/index.cjs",
             "output": "${{ matrix.output }}"
           }
           JSON
           yarn build:sea
+
+      - name: Ad-hoc sign (macOS)
+        if: startsWith(matrix.os, 'macos')
+        run: codesign --force --sign - ${{ matrix.output }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

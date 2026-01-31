@@ -11,7 +11,7 @@
   "license": "ISC",
   "scripts": {
     "build": "tsc",
-    "build:sea": "yarn build && node --build-sea sea-config.json",
+    "build:sea": "tsc -p tsconfig.sea.json && node -e \"const fs=require('fs');fs.renameSync('dist-sea/index.js','dist-sea/index.cjs')\" && node --build-sea sea-config.json",
     "dev": "tsx src/index.ts",
     "prepublishOnly": "yarn build && node scripts/add-shebang.cjs",
     "start": "node dist/index.js"

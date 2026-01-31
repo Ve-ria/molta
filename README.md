@@ -120,7 +120,7 @@ yarn start
 yarn build:sea
 ```
 
-产物位于 `dist/molta-sea`（Windows 可自行加 `.exe`）。
+产物位于 `dist/molta-sea`（Windows 可自行加 `.exe`），中间产物在 `dist-sea/`。
 
 ## 目录结构
 - `src/router/chat/completions.ts`：主接口逻辑

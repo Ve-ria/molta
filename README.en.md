@@ -120,7 +120,7 @@ yarn start
 yarn build:sea
 ```
 
-Output: `dist/molta-sea` (append `.exe` on Windows).
+Output: `dist/molta-sea` (append `.exe` on Windows). Intermediate files in `dist-sea/`.
 
 ## Project Layout
 - `src/router/chat/completions.ts`: main API logic
