@@ -113,6 +113,15 @@ yarn build
 yarn start
 ```
 
+## SEA 打包（单文件可执行）
+> 需要 Node.js 20+（推荐 22+）
+
+```bash
+yarn build:sea
+```
+
+产物位于 `dist/molta-sea`（Windows 可自行加 `.exe`）。
+
 ## 目录结构
 - `src/router/chat/completions.ts`：主接口逻辑
 - `src/services/gateway.ts`：Clawd 网关 WebSocket 客户端

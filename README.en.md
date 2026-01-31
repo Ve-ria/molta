@@ -113,6 +113,15 @@ yarn build
 yarn start
 ```
 
+## SEA build (single executable)
+> Requires Node.js 20+ (22+ recommended)
+
+```bash
+yarn build:sea
+```
+
+Output: `dist/molta-sea` (append `.exe` on Windows).
+
 ## Project Layout
 - `src/router/chat/completions.ts`: main API logic
 - `src/services/gateway.ts`: Clawd gateway WebSocket client
