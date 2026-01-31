@@ -18,15 +18,19 @@ jobs:
         include:
           - os: ubuntu-latest
             node: "25"
+            artifact: molta-sea-linux-x64
             output: dist/molta-sea-linux-x64
           - os: macos-latest
             node: "25"
+            artifact: molta-sea-macos-arm64
             output: dist/molta-sea-macos-arm64
           - os: macos-15-intel
             node: "25"
+            artifact: molta-sea-macos-x64
             output: dist/molta-sea-macos-x64
           - os: windows-latest
             node: "25"
+            artifact: molta-sea-win-x64
             output: dist/molta-sea-win-x64.exe
 
     steps:
@@ -61,5 +65,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.output }}
+          name: ${{ matrix.artifact }}
           path: ${{ matrix.output }}
