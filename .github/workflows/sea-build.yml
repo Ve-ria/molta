@@ -64,9 +64,10 @@ jobs:
             "output": "${{ matrix.output }}"
           }
           JSON
-          node ./node_modules/.bin/tsc -p tsconfig.sea.json
-          node -e "const fs=require('fs');fs.renameSync('dist-sea/index.js','dist-sea/index.cjs')"
-          node --build-sea sea-config.json
+          NODE_BIN="$(command -v node || which node)"
+          "$NODE_BIN" ./node_modules/typescript/bin/tsc -p tsconfig.sea.json
+          "$NODE_BIN" -e "const fs=require('fs');fs.renameSync('dist-sea/index.js','dist-sea/index.cjs')"
+          "$NODE_BIN" --build-sea sea-config.json
 
       - name: Ad-hoc sign (macOS)
         if: startsWith(matrix.os, 'macos')
