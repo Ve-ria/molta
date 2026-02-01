@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { GatewayClient } from "../../services/gateway.js";
 import { config } from "../../services/config.js";
 import { expandRandomString, getOrCreateHttpChatId, renewHttpChatId } from "../../utils/random.js";
+import { Readable } from "node:stream";
 
 type ChatMessage = {
   role?: string;
@@ -86,6 +87,47 @@ function createSseResponse(replyText: string, created: number) {
   });
 }
 
+function createSseStreamResponse(streamSource: AsyncIterable<string>, created: number) {
+  const encoder = new TextEncoder();
+  const nodeStream = Readable.from((async function* () {
+    let sentRole = false;
+    for await (const chunkText of streamSource) {
+      if (!chunkText) continue;
+      const delta: Record<string, string> = { content: chunkText };
+      if (!sentRole) {
+        delta.role = "assistant";
+        sentRole = true;
+      }
+      const chunk = {
+        id: `chatcmpl-clawd-${created}`,
+        object: "chat.completion.chunk",
+        created,
+        model: "clawd",
+        choices: [{ index: 0, delta, finish_reason: null }],
+      };
+      yield encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`);
+    }
+    const done = {
+      id: `chatcmpl-clawd-${created}`,
+      object: "chat.completion.chunk",
+      created,
+      model: "clawd",
+      choices: [{ index: 0, delta: {}, finish_reason: "stop" }],
+    };
+    yield encoder.encode(`data: ${JSON.stringify(done)}\n\n`);
+    yield encoder.encode("data: [DONE]\n\n");
+  })());
+
+  const webStream = Readable.toWeb(nodeStream) as unknown as ReadableStream<Uint8Array>;
+  return new Response(webStream, {
+    headers: {
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    },
+  });
+}
+
 export const completions = new Elysia()
   .use(config)
   .post("/v1/chat/completions", async ({ request, body, set, store }) => {
@@ -121,6 +163,11 @@ export const completions = new Elysia()
       const token = store.config?.clawdToken as string | undefined;
       const gateway = new GatewayClient(host, port, token);
       try {
+        if (payload.stream) {
+          const created = Math.floor(Date.now() / 1000);
+          const source = gateway.askStream(lastUser, sessionKey);
+          return createSseStreamResponse(source, created);
+        }
         replyText = await gateway.ask(lastUser, sessionKey);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
