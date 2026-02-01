@@ -57,13 +57,16 @@ jobs:
       - name: Build SEA
         shell: bash
         run: |
+          mkdir -p dist
           cat > sea-config.json <<'JSON'
           {
             "main": "dist-sea/index.cjs",
             "output": "${{ matrix.output }}"
           }
           JSON
-          yarn build:sea
+          node ./node_modules/.bin/tsc -p tsconfig.sea.json
+          node -e "const fs=require('fs');fs.renameSync('dist-sea/index.js','dist-sea/index.cjs')"
+          node --build-sea sea-config.json
 
       - name: Ad-hoc sign (macOS)
         if: startsWith(matrix.os, 'macos')
