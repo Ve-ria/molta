@@ -89,32 +89,56 @@ function createSseResponse(replyText: string, created: number) {
 
 function createSseStreamResponse(streamSource: AsyncIterable<string>, created: number) {
   const encoder = new TextEncoder();
+  const keepAliveMs = 15_000;
   const nodeStream = Readable.from((async function* () {
     let sentRole = false;
-    for await (const chunkText of streamSource) {
-      if (!chunkText) continue;
-      const delta: Record<string, string> = { content: chunkText };
-      if (!sentRole) {
-        delta.role = "assistant";
-        sentRole = true;
+    const iterator = streamSource[Symbol.asyncIterator]();
+    let pending = iterator.next();
+
+    const makeKeepAlive = () =>
+      new Promise<"keepalive">((resolve) => {
+        const timer = setTimeout(() => resolve("keepalive"), keepAliveMs);
+        // ensure node can exit if this is the only thing left
+        (timer as unknown as { unref?: () => void }).unref?.();
+      });
+
+    while (true) {
+      const result = await Promise.race([pending, makeKeepAlive()]);
+      if (result === "keepalive") {
+        // SSE comment to keep connection alive without affecting data stream
+        yield encoder.encode(": keep-alive\n\n");
+        continue;
       }
-      const chunk = {
-        id: `chatcmpl-clawd-${created}`,
-        object: "chat.completion.chunk",
-        created,
-        model: "clawd",
-        choices: [{ index: 0, delta, finish_reason: null }],
-      };
-      yield encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`);
+
+      const { value, done } = result as IteratorResult<string>;
+      if (done) break;
+      const chunkText = value;
+      if (chunkText) {
+        const delta: Record<string, string> = { content: chunkText };
+        if (!sentRole) {
+          delta.role = "assistant";
+          sentRole = true;
+        }
+        const chunk = {
+          id: `chatcmpl-clawd-${created}`,
+          object: "chat.completion.chunk",
+          created,
+          model: "clawd",
+          choices: [{ index: 0, delta, finish_reason: null }],
+        };
+        yield encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`);
+      }
+      pending = iterator.next();
     }
-    const done = {
+
+    const doneChunk = {
       id: `chatcmpl-clawd-${created}`,
       object: "chat.completion.chunk",
       created,
       model: "clawd",
       choices: [{ index: 0, delta: {}, finish_reason: "stop" }],
     };
-    yield encoder.encode(`data: ${JSON.stringify(done)}\n\n`);
+    yield encoder.encode(`data: ${JSON.stringify(doneChunk)}\n\n`);
     yield encoder.encode("data: [DONE]\n\n");
   })());
 
