@@ -2,7 +2,7 @@
 <h3 align="center">✨ 在任意地方使用 OpenClaw🚀</h3>
 <p align="center"><a href="./README.en.md">English</a></p>
 
-Molta 是一个轻量的 HTTP 网关：将类 OpenAI 的 `v1/chat/completions` 请求转发到本地 MoltBot(ClawdBot) 网关（WebSocket），并返回兼容响应，方便你在现有客户端中直接使用 MoltBot(ClawdBot)。
+Molta 是一个轻量的 HTTP 网关：将类 OpenAI 的 `v1/chat/completions` 请求转发到本地 OpenClaw(ClawdBot) 网关（WebSocket），并返回兼容响应，方便你在现有客户端中直接使用 MoltBot(ClawdBot)。
 
 ## 特性
 - OpenAI 风格接口：`/v1/chat/completions`、`/v1/models`
@@ -42,16 +42,16 @@ yarn dev
 
 必填：
 - `TOKEN`：HTTP 接口鉴权 Token
-- `CLAWD_TOKEN`：Clawd 网关鉴权 Token
+- `CLAWD_TOKEN`：OpenClaw 网关鉴权 Token
 
 可选：
 - `HOST`：监听地址，默认 `localhost`
 - `PORT`：监听端口，默认 `8090`
-- `CLAWD_HOST`：Clawd 网关地址，默认 `localhost`
-  - Molta 与 Clawd 都在 Docker：填 Clawd 容器名或容器 IP
-  - Molta 在 Docker、Clawd 在本机：填 `host.docker.internal`
-  - Molta 与 Clawd 都在本机：填 `localhost`
-- `CLAWD_PORT`：Clawd 网关端口，默认 `18789`
+- `CLAWD_HOST`：OpenClawd 网关地址，默认 `localhost`
+  - Molta 与 OpenClaw 都在 Docker：填 Clawd 容器名或容器 IP
+  - Molta 在 Docker、OpenClaw 在本机：填 `host.docker.internal`
+  - Molta 与 OpenClaw 都在本机：填 `localhost`
+- `CLAWD_PORT`：OpenClaw 网关端口，默认 `18789`
 
 示例：
 ```bash
