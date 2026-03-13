@@ -1,5 +1,5 @@
 <h1 align="center">Molta</h1>
-<h3 align="center">✨ Use MoltBot anywhere 🚀</h3>
+<h3 align="center">✨ Use OpenClaw anywhere 🚀</h3>
 <p align="center"><a href="./README.md">中文</a></p>
 
 Molta is a lightweight HTTP gateway that forwards OpenAI-style `v1/chat/completions` requests to a local MoltBot (ClawdBot) gateway over WebSocket and returns compatible responses, so you can use MoltBot in existing clients.
