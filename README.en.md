@@ -42,16 +42,16 @@ Molta reads `.env` in the current directory and validates it (see `schema.json`)
 
 Required:
 - `TOKEN`: HTTP auth token
-- `CLAWD_TOKEN`: Clawd gateway auth token
+- `CLAWD_TOKEN`: OpenClaw gateway auth token
 
 Optional:
 - `HOST`: bind host, default `localhost`
 - `PORT`: bind port, default `8090`
-- `CLAWD_HOST`: Clawd gateway host, default `localhost`
-  - Both Molta and Clawd in Docker: use Clawd container name or IP
-  - Molta in Docker, Clawd on host: use `host.docker.internal`
+- `CLAWD_HOST`: OpenClaw gateway host, default `localhost`
+  - Both Molta and OpenClaw in Docker: use OpenClaw container name or IP
+  - Molta in Docker, OpenClaw on host: use `host.docker.internal`
   - Both on host: use `localhost`
-- `CLAWD_PORT`: Clawd gateway port, default `18789`
+- `CLAWD_PORT`: OpenClaw gateway port, default `18789`
 
 Example:
 ```bash
